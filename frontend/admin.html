@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container admin-container">
+        <header class="admin-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <div class="tech-line" style="width: 100px;"></div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="resetAllQueues()" class="btn danger-btn" style="background: transparent; border: 1px solid var(--danger-red); font-size: 0.8rem;">RESET ALL QUEUES</button>
+                <button id="logout-btn" class="btn danger-btn">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-controls" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <button onclick="serveDepartment('Consultation')" class="btn success-btn serve-btn" style="flex: 1; font-size: 1rem; padding: 15px;">SERVE CONSULTATION</button>
+            <button onclick="serveDepartment('Pharmacy')" class="btn success-btn serve-btn" style="flex: 1; font-size: 1rem; padding: 15px;">SERVE PHARMACY</button>
+            <button onclick="serveDepartment('Billing')" class="btn success-btn serve-btn" style="flex: 1; font-size: 1rem; padding: 15px;">SERVE BILLING</button>
+            <button onclick="serveDepartment('Emergency')" class="btn danger-btn serve-btn" style="flex: 1; font-size: 1rem; padding: 15px; box-shadow: 0 0 15px var(--danger-glow);">SERVE EMERGENCY</button>
+        </div>
+
+        <main class="dashboard admin-grid">
+            <!-- Normal Queue -->
+            <section>
+                <h2>Active Queue</h2>
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Dept</th>
+                            <th>Token</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-queue-list">
+                        <!-- Injected -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Emergency Requests -->
+            <section class="emergency-section">
+                <h2>Pending Emergency Requests <span id="emergency-badge" class="badge hidden">0</span></h2>
+                <div id="emergency-requests">
+                    <!-- Injected -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

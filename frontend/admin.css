@@ -1,0 +1,160 @@
+/* Admin Specific High-Tech Styles */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header #logout-btn {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+.admin-controls {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.serve-btn {
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    max-width: 500px;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* Admin Data Table */
+.queue-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    text-align: left;
+    font-family: var(--font-body);
+}
+
+.queue-table th {
+    font-family: var(--font-heading);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 15px;
+    border-bottom: 1px solid var(--secondary-blue);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.queue-table td {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    transition: background 0.2s;
+}
+
+.queue-table tr:hover td {
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.queue-table td:first-child {
+    border-left: 2px solid var(--secondary-blue);
+}
+
+.queue-table tr.emergency-row td {
+    background: rgba(255, 0, 60, 0.05);
+}
+.queue-table tr.emergency-row td:first-child {
+    border-left-color: var(--danger-red);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.status-none {
+    background: rgba(100, 116, 139, 0.2);
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+}
+
+.status-approved {
+    background: rgba(255, 0, 60, 0.2);
+    color: var(--danger-red);
+    border: 1px solid var(--danger-red);
+    box-shadow: 0 0 10px var(--danger-glow);
+}
+
+/* Emergency Requests Panel */
+.emergency-section {
+    border-color: var(--danger-red);
+}
+
+.emergency-section h2 {
+    color: var(--danger-red);
+    border-bottom-color: rgba(255, 0, 60, 0.3);
+}
+.emergency-section h2::before {
+    content: '[!]';
+    color: var(--danger-red);
+}
+
+.badge {
+    background: var(--danger-red);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-left: 10px;
+    box-shadow: 0 0 10px var(--danger-glow);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.emergency-card {
+    background: rgba(255, 0, 60, 0.05);
+    border: 1px solid var(--danger-red);
+    padding: 20px;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.emergency-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: var(--danger-red);
+    box-shadow: 0 0 10px var(--danger-red);
+}
+
+.emergency-card h3 {
+    color: #fff;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.emergency-card p {
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.action-buttons .btn {
+    font-size: 0.9rem;
+    padding: 10px;
+}

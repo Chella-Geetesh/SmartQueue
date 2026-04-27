@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Virtual Queue</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using Socket.io CDN for client side -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Hospital Virtual Queue</h1>
+            <p>Join the queue from anywhere and track your position.</p>
+            <div class="tech-line"></div>
+        </header>
+
+        <main class="dashboard">
+            <!-- Queue Status Section -->
+            <section class="queue-status">
+                <h2>Live Queue Status</h2>
+                
+                <div class="now-serving" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <h4 style="color: var(--text-muted); font-size: 0.8rem;">Consultation</h4>
+                        <div id="ns-Consultation" class="token-display" style="font-size: 2rem; padding: 10px; min-width: 80px;">--</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: var(--text-muted); font-size: 0.8rem;">Pharmacy</h4>
+                        <div id="ns-Pharmacy" class="token-display" style="font-size: 2rem; padding: 10px; min-width: 80px;">--</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: var(--text-muted); font-size: 0.8rem;">Billing</h4>
+                        <div id="ns-Billing" class="token-display" style="font-size: 2rem; padding: 10px; min-width: 80px;">--</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: var(--danger-red); font-size: 0.8rem;">Emergency</h4>
+                        <div id="ns-Emergency" class="token-display" style="font-size: 2rem; padding: 10px; min-width: 80px; border-color: var(--danger-red); box-shadow: 0 0 10px var(--danger-glow);">--</div>
+                    </div>
+                </div>
+
+                <div class="next-patients">
+                    <h3>Next in Line</h3>
+                    <div class="tech-line" style="height: 1px; opacity: 0.3;"></div>
+                    <ul id="queue-list">
+                        <!-- Queue items injected here -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Registration Form Section -->
+            <section class="registration">
+                <h2>Join the Queue</h2>
+                <form id="join-queue-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Service Required</label>
+                        <select id="department" required style="width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--secondary-blue); color: var(--text-main); font-family: var(--font-body); font-size: 1rem; outline: none; cursor: pointer;">
+                            <option value="Consultation">Consultation (Doctor)</option>
+                            <option value="Pharmacy">Pharmacy (Medicine)</option>
+                            <option value="Billing">Billing (Payments)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="problem">Health Problem</label>
+                        <textarea id="problem" required rows="2" placeholder="Briefly describe your issue"></textarea>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="emergency">
+                        <label for="emergency" class="emergency-label">Mark as Emergency</label>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn">Get Token</button>
+                </form>
+
+                <div id="my-status" class="hidden my-status-box">
+                    <h3>Your Token: <span id="my-token">--</span></h3>
+                    <p>Current Position: <strong id="my-position">--</strong></p>
+                    <p>Est. Wait Time: <strong id="my-wait-time" style="color: var(--primary-cyan);">-- mins</strong></p>
+                    <p id="my-emergency-status" class="hidden">Emergency Status: <span>Pending</span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
