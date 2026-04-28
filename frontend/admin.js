@@ -12,6 +12,14 @@ const getHeaders = () => ({
     'Content-Type': 'application/json'
 });
 
+function getTokenPrefix(dept) {
+    if (dept === 'Consultation') return 'C-';
+    if (dept === 'Pharmacy') return 'P-';
+    if (dept === 'Billing') return 'B-';
+    if (dept === 'Emergency') return 'E-';
+    return '';
+}
+
 // DOM Elements
 const queueList = document.getElementById('admin-queue-list');
 const emergencyContainer = document.getElementById('emergency-requests');
@@ -41,7 +49,7 @@ function renderQueue(queue) {
         tr.innerHTML = `
             <td><strong>${p.queuePosition}</strong></td>
             <td><span class="status-badge" style="background: rgba(0, 240, 255, 0.1); border-color: var(--primary-cyan); color: var(--primary-cyan);">${p.department || 'Consultation'}</span></td>
-            <td>${p.tokenNumber}</td>
+            <td>${getTokenPrefix(p.department || 'Consultation')}${p.tokenNumber}</td>
             <td>${p.name}</td>
             <td>${p.age}</td>
             <td>${p.isEmergency ? p.emergencyStatus.toUpperCase() : 'Normal'}</td>
@@ -65,7 +73,7 @@ function renderEmergencies(emergencies) {
         const div = document.createElement('div');
         div.className = 'emergency-card';
         div.innerHTML = `
-            <h3>Token: ${p.tokenNumber} - ${p.name} (Age: ${p.age})</h3>
+            <h3>Token: ${getTokenPrefix(p.department || 'Consultation')}${p.tokenNumber} - ${p.name} (Age: ${p.age})</h3>
             <p><strong>Problem:</strong> ${p.problem}</p>
             <div class="emergency-actions">
                 <button onclick="handleEmergency('${p._id}', 'approve')" class="btn success-btn">Approve</button>

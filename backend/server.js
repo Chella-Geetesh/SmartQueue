@@ -49,8 +49,8 @@ app.post('/api/patients', async (req, res) => {
         // Default to Consultation if not provided
         const patientDepartment = department || 'Consultation';
 
-        // Generate Token Number
-        const lastPatient = await Patient.findOne().sort({ tokenNumber: -1 });
+        // Generate Token Number based on department
+        const lastPatient = await Patient.findOne({ department: patientDepartment }).sort({ tokenNumber: -1 });
         const tokenNumber = lastPatient ? lastPatient.tokenNumber + 1 : 1;
 
         // Calculate Position for specific department
@@ -107,8 +107,8 @@ app.get('/api/queue', async (req, res) => {
 // 3. Reset/Clear Queue (Admin Only)
 app.delete('/api/queue', authMiddleware, async (req, res) => {
     try {
-        // Clear queuePosition from all patients
-        await Patient.updateMany({}, { $unset: { queuePosition: 1 } });
+        // Delete all patients to reset token numbers to 1
+        await Patient.deleteMany({});
         io.emit('queueUpdate');
         res.json({ message: 'All queues cleared' });
     } catch (err) {
@@ -159,6 +159,10 @@ app.post('/api/emergency/:id', authMiddleware, async (req, res) => {
             
             patient.department = 'Emergency';
             patient.queuePosition = activeEmergencies + 1;
+            
+            // Assign a new token number for the Emergency queue
+            const lastEmergency = await Patient.findOne({ department: 'Emergency' }).sort({ tokenNumber: -1 });
+            patient.tokenNumber = lastEmergency ? lastEmergency.tokenNumber + 1 : 1;
         } else {
             patient.emergencyStatus = 'rejected';
             // Stays at current position
@@ -206,7 +210,9 @@ app.get('*', (req, res) => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 5000;
+const PORT =  5000;
+
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

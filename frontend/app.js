@@ -2,6 +2,15 @@ const API_URL = '/api';
 const socket = io();
 
 let myToken = null;
+let myId = null;
+
+function getTokenPrefix(dept) {
+    if (dept === 'Consultation') return 'C-';
+    if (dept === 'Pharmacy') return 'P-';
+    if (dept === 'Billing') return 'B-';
+    if (dept === 'Emergency') return 'E-';
+    return '';
+}
 
 // DOM Elements
 const form = document.getElementById('join-queue-form');
@@ -30,7 +39,7 @@ function renderQueue(queue) {
         const nextInDept = queue.find(p => p.department === dept && p.queuePosition === 1);
         const display = document.getElementById(`ns-${dept}`);
         if (display) {
-            display.textContent = nextInDept ? nextInDept.tokenNumber : '--';
+            display.textContent = nextInDept ? `${getTokenPrefix(dept)}${nextInDept.tokenNumber}` : '--';
         }
     });
 
@@ -41,7 +50,7 @@ function renderQueue(queue) {
         const li = document.createElement('li');
         if (p.department === 'Emergency') li.classList.add('emergency-item');
         li.innerHTML = `
-            <span><strong>[${p.department}]</strong> Token: <strong>${p.tokenNumber}</strong></span>
+            <span><strong>[${p.department}]</strong> Token: <strong>${getTokenPrefix(p.department)}${p.tokenNumber}</strong></span>
             <span>Pos: ${p.queuePosition}</span>
             <span style="color: var(--primary-cyan); font-size: 0.85em;">Est: ${(p.queuePosition - 1) * 10}m</span>
         `;
@@ -49,9 +58,13 @@ function renderQueue(queue) {
     });
 
     // Update my position if I am in the queue
-    if (myToken) {
-        const me = queue.find(p => p.tokenNumber === myToken);
+    if (myId) {
+        const me = queue.find(p => p._id === myId);
         if (me) {
+            if (myToken !== me.tokenNumber) {
+                myToken = me.tokenNumber;
+            }
+            myTokenDisplay.textContent = `${getTokenPrefix(me.department)}${myToken}`;
             myPositionDisplay.textContent = me.queuePosition;
             myWaitTimeDisplay.textContent = `${(me.queuePosition - 1) * 10} mins`;
             if (me.isEmergency) {
@@ -88,7 +101,8 @@ form.addEventListener('submit', async (e) => {
 
         // Show my status
         myToken = newPatient.tokenNumber;
-        myTokenDisplay.textContent = myToken;
+        myId = newPatient._id;
+        myTokenDisplay.textContent = `${getTokenPrefix(newPatient.department)}${myToken}`;
         myPositionDisplay.textContent = newPatient.queuePosition;
         myWaitTimeDisplay.textContent = `${(newPatient.queuePosition - 1) * 10} mins`;
         myStatusBox.classList.remove('hidden');
@@ -106,7 +120,7 @@ socket.on('queueUpdate', () => {
 });
 
 socket.on('patientServed', (patient) => {
-    if (patient.tokenNumber === myToken) {
+    if (patient._id === myId) {
         alert('It is your turn! Please proceed to the doctor.');
     }
 });
